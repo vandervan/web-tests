@@ -77,8 +77,8 @@ class Assert {
         return this.elementIsPresent(textOnPage)
     }
 
-    stateOfButton (text) {
-        let button = element(by.xpath(`//button[text()[contains(., "${text}")]]`));
+    stateOfButton (buttonName) {
+        let button = element(by.xpath(`//button[text()[contains(., "${buttonName}")]]`));
         return this.elementIsPresent(button)
             .then(() => button.getAttribute('disabled'))
     }

@@ -4,14 +4,14 @@ chai.use(chaiAsPromised);
 let moment = require("moment");
 let reportDir = "reports/report_" + moment().format("YYYYMMDD_HHmmss");
 chai.use(require('chai-dom'));
-let should = chai.should();
+
 
 require('custom-env').env(true);
 
 console.log(process.env.SELENIUM_HUB);
 
 exports.config = {
-    seleniumAddress: process.env.EVERHOUR_SELENIUM,
+    seleniumAddress: process.env.SELENIUM_HUB,
     baseUrl: process.env.APP_URL,
     capabilities: {
         browserName: "chrome",
@@ -63,11 +63,14 @@ exports.config = {
     useAllAngular2AppRoots: true,
 
     params : {
-        apiUrl : process.env.API_URL,
+        appUrl: process.env.APP_URL,
+        apiUrl: process.env.API_URL,
         useSessionId: false,
         wait5: 5000,
         wait10: 10000,
         wait30: 30000,
-        waitForTooltip: 250
+        waitForTooltip: 250,
+        githubUsername: "arthur@everhour.com",
+        githubPassword: "tapo4ek2010"
     }
 };
