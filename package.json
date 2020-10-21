@@ -37,6 +37,7 @@
     "xmultiple": "^1.0.0",
     "moment": "^2.29.1",
     "custom-env": "^2.0.1",
-    "fs-extra": "^9.0.1"
+    "fs-extra": "^9.0.1",
+    "xml": "^1.0.1"
   }
 }
