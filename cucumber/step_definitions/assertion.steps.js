@@ -1,6 +1,8 @@
 "use strict";
-let { Assert } = require("../helpers/assertions");
-let { defineSupportCode } = require("cucumber");
+
+
+const {Assert} = require("../helpers/assertions");
+const {defineSupportCode} = require("@cucumber/cucumber");
 
 defineSupportCode(function ({ Then }) {
 

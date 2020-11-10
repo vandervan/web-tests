@@ -1,14 +1,14 @@
 "use strict";
 
+const {Wait} = require("./wait");
 const EC = protractor.ExpectedConditions;
-let {normalize} = require("../helpers/text");
-let {waitForTextInElement} = require("../helpers/wait");
+const {normalize} = require("../helpers/text");
 
-class Actions {
+class Actions extends Wait {
 
     constructor() {
+        super();
     }
-
 
     clickToElement (path) {
         return browser.wait(EC.visibilityOf(path), browser.params.wait30, `not visible element found with following locator: ${path.locator()}`)
@@ -52,7 +52,7 @@ class Actions {
         return browser.wait(EC.visibilityOf(pathToFirstElement), browser.params.wait10, `no element found with following locator: ${pathToFirstElement.locator()}`)
             .then(() => browser.actions().mouseMove(pathToFirstElement).perform())
             .then(() => browser.wait(EC.visibilityOf(pathToSecondElement), browser.params.wait10, `no element found with following locator: ${pathToSecondElement.locator()}`))
-            .then(() => browser.wait(waitForTextInElement(pathToSecondElement, expectedText), browser.params.wait10 ))
+            .then(() => browser.wait(super.waitForTextInElement(pathToSecondElement, expectedText), browser.params.wait10 ))
     }
 
 }

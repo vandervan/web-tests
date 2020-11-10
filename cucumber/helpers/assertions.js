@@ -1,106 +1,109 @@
 "use strict";
 
-const EC = protractor.ExpectedConditions;
-let {waitForTextInElement, waitForCssValueInElement, waitForAttributeInElement, waitForPartialAttributeInElement} = require("../helpers/wait");
 
-class Assert {
+const {normalize} = require("./text");
+const {Wait} = require("./wait");
+const EC = protractor.ExpectedConditions;
+
+class Assert extends Wait {
 
     constructor() {
+        super();
     }
 
-    elementIsPresent (path) {
+    elementIsVisible (path) {
         return browser.wait(EC.visibilityOf(path), browser.params.wait10, `no element found with following locator: ${path.locator()}`)
     }
 
-    elementIsNotPresent (path) {
+    elementIsNotVisible (path) {
         return browser.wait(EC.invisibilityOf(path), browser.params.wait10, `element found with following locator: ${path.locator()}, but should not be found`)
     }
 
-    elementIsPresentInDom (path) {
+    elementIsPresent (path) {
         return browser.wait(EC.presenceOf(path), browser.params.wait10, `element found in DOM with following locator: ${path.locator()}, but should not be found`)
     }
 
-    elementIsNotPresentInDom (path) {
+    elementIsNotPresent (path) {
         return browser.wait(EC.stalenessOf(path), browser.params.wait10, `element found in DOM with following locator: ${path.locator()}, but should not be found`)
     }
 
     textPresentInElement (text, path) {
-        return this.elementIsPresent(path)
+        return this.elementIsVisible(path)
             .then(() => browser.sleep(500))
-            .then(() => this.elementIsPresent(path))
-            .then(() => browser.wait(waitForTextInElement(path, text), browser.params.wait10, ` text "${text}" not found`))
+            .then(() => this.elementIsVisible(path))
+            .then(() => browser.wait(super.waitForTextInElement(path, text), browser.params.wait10, ` text "${text}" not found`))
     }
 
     checkInputError(input, cssProperty, cssValue) {
-        return this.elementIsPresent(input)
-            .then(() => browser.wait(waitForPartialAttributeInElement(input, 'class' , 'everhour-error'), browser.params.wait10, `attribute everhour-error not found`))
-            .then(() => browser.wait(waitForCssValueInElement(input, cssProperty, cssValue), browser.params.wait10, `css value "${cssValue}" not found`))
+        return this.elementIsVisible(input)
+            .then(() => browser.wait(super.waitForPartialAttributeInElement(input, 'class' , 'everhour-error'), browser.params.wait10, `attribute everhour-error not found`))
+            .then(() => browser.wait(super.waitForCssValueInElement(input, cssProperty, cssValue), browser.params.wait10, `css value "${cssValue}" not found`))
     }
 
     checkNoTextOnPage (text) {
         const textOnPage = element(by.xpath(`//*[text()[contains(., "${text}")]]`));
-        return this.elementIsNotPresent(textOnPage)
+        return this.elementIsNotVisible(textOnPage)
     }
 
     checkNoLabelOnPage (text) {
         const labelOnPage = element(by.xpath(`//label[text()[contains(., "${text}")]]`));
-        return this.elementIsNotPresent(labelOnPage)
+        return this.elementIsNotVisible(labelOnPage)
     }
 
     checkLabelOnPage (text) {
         const labelOnPage = element(by.xpath(`//label[text()[contains(., "${text}")]]`));
-        return this.elementIsPresent(labelOnPage)
+        return this.elementIsVisible(labelOnPage)
     }
 
     checkButtonOnPage (text) {
         const buttonOnPage = element(by.xpath(`//*[contains(@class, 'button') and contains(text(), '${text}')]`));
-        return this.elementIsPresent(buttonOnPage)
+        return this.elementIsVisible(buttonOnPage)
     }
 
     checkLinkOnPage (text) {
         const linkOnPage = element(by.xpath(`//a[text()[contains(., "${text}")]]`));
-        return this.elementIsPresent(linkOnPage)
+        return this.elementIsVisible(linkOnPage)
     }
 
     checkNoButtonOnPage (text) {
         const buttonOnPage = element(by.xpath(`//button[text()[contains(., "${text}")]]`));
-        return this.elementIsNotPresent(buttonOnPage)
+        return this.elementIsNotVisible(buttonOnPage)
     }
 
     checkNoLinkOnPage (text) {
         const linkOnPage = element(by.xpath(`//a[text()[contains(., "${text}")]]`));
-        return this.elementIsNotPresent(linkOnPage)
+        return this.elementIsNotVisible(linkOnPage)
     }
 
     checkTextIsOnPage (text) {
         const textOnPage = element(by.xpath(`//*[contains(text(), '${text}') and(not(name()='title'))]`));
-        return this.elementIsPresent(textOnPage)
+        return this.elementIsVisible(textOnPage)
     }
 
     stateOfButton (buttonName) {
         let button = element(by.xpath(`//button[text()[contains(., "${buttonName}")]]`));
-        return this.elementIsPresent(button)
+        return this.elementIsVisible(button)
             .then(() => button.getAttribute('disabled'))
     }
 
     getInputWithLabelText (label) {
         let input = element(by.xpath(`//*[text()='${label}']/ancestor::forminput//input`));
-        return this.elementIsPresent(input)
+        return this.elementIsVisible(input)
             .then(() => input.getAttribute('value'))
     }
 
     getCssValueForElement (cssValueName, element) {
-        return this.elementIsPresent(element)
+        return this.elementIsVisible(element)
             .then(() => element.getCssValue(cssValueName))
     }
 
     checkCssValueInElement(elm, attribute, expectedValue) {
-        return this.elementIsPresent(elm)
-            .then(() => browser.wait(waitForCssValueInElement(elm, attribute, expectedValue), browser.params.wait10, `css value "${expectedValue}" not found`))
+        return this.elementIsVisible(elm)
+            .then(() => browser.wait(super.waitForCssValueInElement(elm, attribute, expectedValue), browser.params.wait10, `css value "${expectedValue}" not found`))
     }
 
     getAttributeForElement (attributeName, element) {
-        return this.elementIsPresent(element)
+        return this.elementIsVisible(element)
             .then(() => element.getAttribute(attributeName))
     }
 
@@ -121,22 +124,22 @@ class Assert {
     }
 
     checkAttributeValueInElement(input, attribute, value) {
-        return this.elementIsPresent(input)
-            .then(() => browser.wait(waitForAttributeInElement(input, attribute, value), browser.params.wait10, `attribute everhour-error not found`))
+        return this.elementIsVisible(input)
+            .then(() => browser.wait(super.waitForAttributeInElement(input, attribute, value), browser.params.wait10, `attribute everhour-error not found`))
     }
 
     checkTextInElement (elm, expectedText) {
-        return this.elementIsPresent(elm)
-            .then(() => browser.wait(waitForTextInElement(elm, expectedText), browser.params.wait10, ` text "${expectedText}" not found`))
+        return this.elementIsVisible(elm)
+            .then(() => browser.wait(super.waitForTextInElement(elm, expectedText), browser.params.wait10, ` text "${expectedText}" not found`))
     }
 
     checkPartialAttributeValueInElement(input, attribute, value) {
-        return this.elementIsPresent(input)
-            .then(() => browser.wait(waitForPartialAttributeInElement(input, attribute, value), browser.params.wait10, `attribute "${attribute}" not found`))
+        return this.elementIsVisible(input)
+            .then(() => browser.wait(super.waitForPartialAttributeInElement(input, attribute, value), browser.params.wait10, `attribute "${attribute}" not found`))
     }
 
     checkElementAttributeValueNotInElement(input, attribute, value) {
-        return this.elementIsPresent(input)
+        return this.elementIsVisible(input)
             .then(() => browser.wait(this.waitForAttributeNotInElement(input, attribute, value), 5000, `Element's "${input.locator()}" attribute "${attribute}" still contains "${value}"`))
     }
 
