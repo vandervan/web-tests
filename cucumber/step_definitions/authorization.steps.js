@@ -2,11 +2,15 @@
 
 
 const {Authorization} = require("../pages/authorization.page");
-const {Given, When, Then} = require("@cucumber/cucumber");
+const {defineSupportCode} = require("cucumber");
 
-    let auth = new Authorization()
+defineSupportCode(function ({Given, When, Then}) {
 
-    Given(/I login with "(.*?)" login and "(.*?)" password to Github$/, () => auth.authorization())
+    const Authorization = new Authorization();
+
+    Given(/I login with "(.*?)" login and "(.*?)" password to Github$/, (username, password) => Authorization.authorization(username, password));
+
+});
 
 
 

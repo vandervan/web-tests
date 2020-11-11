@@ -2,9 +2,9 @@
 
 
 const {Assert} = require("../helpers/assertions");
-const {defineSupportCode} = require("@cucumber/cucumber");
+const {defineSupportCode} = require("cucumber");
 
-defineSupportCode(function ({ Then }) {
+defineSupportCode(function ({Given, When, Then}){
 
     let assert = new Assert();
 
@@ -12,5 +12,6 @@ defineSupportCode(function ({ Then }) {
         assert.stateOfButton(buttonName).should.eventually.equal("true"));
 
     Then(/button "(.*?)" should be enabled$/, (buttonName) =>
-        assert.stateOfButton(buttonName).should.eventually.equal(null))
-});
+        assert.stateOfButton(buttonName).should.eventually.equal(null));
+
+})

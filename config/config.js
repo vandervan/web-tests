@@ -1,9 +1,14 @@
+"use strict"
+
+
 let chai = require("chai");
 let chaiAsPromised = require("chai-as-promised");
 chai.use(chaiAsPromised);
 let moment = require("moment");
+const process = require("custom-env");
 let reportDir = "reports/report_" + moment().format("YYYYMMDD_HHmmss");
 chai.use(require('chai-dom'));
+let should = chai.should();
 
 
 require('custom-env').env(true);
@@ -37,8 +42,8 @@ exports.config = {
         strict: true,
         format: ["json:" + reportDir + "/cucumber/cucumber-report.json", "node_modules/cucumber-pretty", "rerun:@rerun.txt"],
         require: [
-            "../cucumber/step_definitions/*",
-            "../cucumber/hooks/*.js",
+            "../step_definitions/*.steps.js",
+            "../hooks/*.",
         ],
     },
     plugins: [
@@ -70,7 +75,7 @@ exports.config = {
         wait10: 10000,
         wait30: 30000,
         waitForTooltip: 250,
-        githubUsername: "arthur@everhour.com",
-        githubPassword: "tapo4ek2010"
+        githubUsername: "arthur.krivitsky@yandex.ru",
+        githubPassword: "Developer2020"
     }
 };

@@ -13,7 +13,6 @@ class Authorization extends xmultiple(Assert, Actions) {
         this.password = element(by.css("#password"));
         this.signIn = element(by.css("[href='/login']"));
         this.submitBtn = element(by.xpath("//button[@type='submit']"));
-
     }
 
     authorization (username, password) {
