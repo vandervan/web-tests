@@ -55,6 +55,11 @@ class Actions extends Wait {
             .then(() => browser.wait(super.waitForTextInElement(pathToSecondElement, expectedText), browser.params.wait10 ))
     }
 
+    followLink(link) {
+        let elm = element(by.linkText(`${link}`));
+        return this.clickToElement(elm)
+    }
+
 }
 
 module.exports.Actions = Actions;

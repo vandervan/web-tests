@@ -1,19 +1,15 @@
-"use strict"
+"use strict";
 
 
+
+require('custom-env').env();
 let chai = require("chai");
 let chaiAsPromised = require("chai-as-promised");
 chai.use(chaiAsPromised);
 let moment = require("moment");
-const process = require("custom-env");
 let reportDir = "reports/report_" + moment().format("YYYYMMDD_HHmmss");
 chai.use(require('chai-dom'));
-let should = chai.should();
 
-
-require('custom-env').env(true);
-
-console.log(process.env.SELENIUM_HUB);
 
 exports.config = {
     seleniumAddress: process.env.SELENIUM_HUB,
@@ -26,24 +22,34 @@ exports.config = {
             w3c: false
         },
     },
+    maxSessions: 1,
     ignoreUncaughtExceptions: true,
     allScriptsTimeout: 1000000,
+    defaultTimeoutInterval: 45000,
+    getPageTimeout: 40000,
+    setDefaultTimeout: 10000,
     framework: "custom",
     frameworkPath: require.resolve("protractor-cucumber-framework"),
     specs: [
-        "../features/*"
+        "/features/*.feature",
+        "../features/*.feature",
+        "../features/*/*.feature",
+        "../features/*/*/*.feature",
+        "../features/*/*/*/*.feature"
     ],
     exclude: "../features/database.feature",
     onPrepare: function() {
-        browser.ignoreSynchronization = true;
-        global.expect = chai.expect;
+        browser.waitForAngularEnabled(false)
+        global.expect = chai.expect
     },
     cucumberOpts: {
         strict: true,
         format: ["json:" + reportDir + "/cucumber/cucumber-report.json", "node_modules/cucumber-pretty", "rerun:@rerun.txt"],
         require: [
-            "../step_definitions/*.steps.js",
-            "../hooks/*.",
+            "/cucumber/step_definitions/*.js",
+            "../cucumber/step_definitions/*.js",
+            "../cucumber/step_definitions/*/*.js",
+            "../cucumber/hooks/*.js",
         ],
     },
     plugins: [
