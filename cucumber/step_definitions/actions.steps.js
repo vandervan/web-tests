@@ -11,3 +11,6 @@ defineSupportCode(function ({Given, When, Then}) {
     Then(/I follow link with text "(.*?)"$/, (link) => actions.followLink(link));
 
 });
+
+
+// ##test
